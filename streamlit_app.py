@@ -1,7 +1,7 @@
 import streamlit as st
 import pickle
 
-with open("C:\Users\Sanoi", 'rb') as f:
+with open("C:\\Users\\Sanoi\\model.pkl", 'rb') as f:
     clf = pickle.load(f)
 
 komn = st.number_input("Количество комнат")
