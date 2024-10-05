@@ -1,5 +1,3 @@
 import streamlit as st
-
-st.title('🎈 App Name')
-
-st.write('Hello world!')
+if st.button("Нажать"):
+  st.write("Zoir Daun")
