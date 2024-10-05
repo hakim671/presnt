@@ -1,6 +1,6 @@
 import streamlit as st
 
-komn = st.number_input("Количество комнат",value=30)
+komn = st.number_input("Количество комнат",value=1)
 etag = st.number_input("Этаж")
 plosh = st.number_input("Площадь")
 city = st.selectbox("Выберите город", ["Душанбе", "Худжанд", "Бохтар"])
