@@ -1,8 +1,8 @@
 import streamlit as st
 
 komn = st.number_input("Количество комнат",value=1)
-etag = st.number_input("Этаж")
-plosh = st.number_input("Площадь")
+etag = st.number_input("Этаж",value=1)
+plosh = st.number_input("Площадь",value=1)
 city = st.selectbox("Выберите город", ["Душанбе", "Худжанд", "Бохтар"])
 tip = st.selectbox("Тип застройки", ["Новостройка", "Вторичный рынок"])
 sost = st.selectbox("Состояние", ["Построено", "На стадии"])
