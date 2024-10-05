@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 import pickle
-file_path = os.path.join("C:", "Users", "Sanoi", "model.pkl")
+file_path = os.path.join("C:", "Пользователи", "Sanoi", "model.pkl")
 
 with open(file_path, 'rb') as f:
     clf = pickle.load(f)
