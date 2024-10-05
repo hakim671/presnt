@@ -1,3 +1,4 @@
 import streamlit as st
+name = st.text_input("Введите ваше имя")
 if st.button("Нажать"):
-  st.write("Zoir Daun")
+  st.write(f"{name} Daun")
