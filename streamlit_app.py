@@ -6,12 +6,12 @@ scaler = StandardScaler()
 from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
 
-df = pd.read_excel("C:\\Users\\Sanoi\\Homes_enc.xlsx")
+df = pd.read_excel("Homes_enc.xlsx")
 X = df.drop('Цена', axis=1)  # Признаки
 y = df['Цена']
 scaler.fit_transform(X)
 
-df2 = pd.read_excel("C:\\Users\\Sanoi\\Best_forest.xlsx")
+df2 = pd.read_excel("Best_forest.xlsx")
 prices = df2['Цена']
 features = df2.drop(['Цена'],axis=1)
 
