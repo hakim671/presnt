@@ -9,7 +9,7 @@ import pandas as pd
 df = pd.read_excel("Homes_enc.xlsx")
 X = df.drop('Цена', axis=1)  # Признаки
 y = df['Цена']
-scaler.fit_transform(X)
+scaler.fit(X)
 
 df2 = pd.read_excel("Best_forest.xlsx")
 prices = df2['Цена']
@@ -70,4 +70,6 @@ elif df_pred['Ремонт'].iloc[0] == "Без ремонта":
 
 # Удаление ненужных колонок
 df_pred = df_pred.drop(['Город', 'Тип', 'Состояние', 'Ремонт'], axis=1)
+df_sc = scaler.transform(df_pred)
+print(f"Цена находится в диапозоне от {round(model.predict(df_sc)[0]*0.88,0)} до {round(model.predict(df_sc)[0]*1.12,0)}")
 st.write(df_pred)
