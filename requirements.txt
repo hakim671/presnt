@@ -2,6 +2,3 @@ streamlit
 pandas
 numpy
 scikit-learn
-RandomForestRegressor
-sklearn.model_selection
-sklearn.preprocessing
