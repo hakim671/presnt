@@ -73,3 +73,5 @@ df_pred = df_pred.drop(['Город', 'Тип', 'Состояние', 'Ремо�
 df_sc = scaler.transform(df_pred)
 if st.button("Начать прогноз"):
   st.write(f"Цена находится в диапозоне от {round(model.predict(df_sc)[0]*0.88,0)} до {round(model.predict(df_sc)[0]*1.12,0)}")
+st.write()
+st.write("Автор Хаким")
