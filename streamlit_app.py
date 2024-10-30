@@ -5,6 +5,7 @@ from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
+import math
 
 df = pd.read_excel("Homes_enc.xlsx")
 X = df.drop('Цена', axis=1)  # Признаки
@@ -72,5 +73,7 @@ elif df_pred['Ремонт'].iloc[0] == "Без ремонта":
 df_pred = df_pred.drop(['Город', 'Тип', 'Состояние', 'Ремонт'], axis=1)
 df_sc = scaler.transform(df_pred)
 if st.button("Начать прогноз"):
-  st.write(f"Цена находится в диапозоне от {round(model.predict(df_sc)[0]*0.88,0)} до {round(model.predict(df_sc)[0]*1.12,0)}")
+  k = math.floor(int(round(model.predict(df_sc)[0]*0.90,0)) / 100000) * 100000
+  t = math.ceil(int(round(model.predict(df_sc)[0]*1.1,0)) / 100000) * 100000
+  st.write(f"Цена находится в диапозоне от {k} до {t}")
 st.write("Автор Хаким")
