@@ -8,13 +8,8 @@ import pandas as pd
 import math
 import pickle
 
-df = pd.read_excel("Homes_enc.xlsx")
-X = df.drop('Цена', axis=1)  # Признаки
-y = df['Цена']
-scaler.fit(X)
-
-with open("scaler.pkl", "wb") as file:
-    pickle.dump(scaler, file)
+with open("scaler.pkl", "rb") as scaler_file:
+    scaler = pickle.load(scaler_file)
 
 with open("model_rf.pkl", "rb") as file:
     model = pickle.load(file)
