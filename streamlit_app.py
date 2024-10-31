@@ -8,6 +8,16 @@ import pandas as pd
 import math
 import pickle
 
+st.markdown("""
+<style>
+    body {
+        background-color: #121212;
+        color: white;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+
 with open("scaler.pkl", "rb") as scaler_file:
     scaler = pickle.load(scaler_file)
 
