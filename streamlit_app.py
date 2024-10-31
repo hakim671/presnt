@@ -9,13 +9,25 @@ import math
 import pickle
 
 st.markdown("""
-<style>
-    body {
-        background-color: #121212;
-        color: white;
-    }
-</style>
-""", unsafe_allow_html=True)
+    <style>
+        .css-18e3th9 {  /* Основной фон приложения */
+            background-color: #121212;
+            color: white;
+        }
+        .css-1d391kg p { /* Цвет текста */
+            color: white;
+        }
+        .stButton>button {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
 
 
 with open("scaler.pkl", "rb") as scaler_file:
