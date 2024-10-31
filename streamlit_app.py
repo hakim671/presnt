@@ -17,15 +17,8 @@ df2 = pd.read_excel("Best_forest.xlsx")
 prices = df2['Цена']
 features = df2.drop(['Цена'],axis=1)
 
-X_train, X_test, y_train, y_test = train_test_split(features,prices,
-                                                    test_size=0.25, random_state=42)
-model = RandomForestRegressor(n_estimators=400, max_depth=14, random_state=42)
-model.fit(X_train,y_train)
-
-
-import pickle
-with open("model_rf.pkl", "wb") as file:
-    pickle.dump(model, file)
+with open("model_rf.pkl", "rb") as file:
+    model = pickle.load(file)
 
 
 komn = st.number_input("Количество комнат",value=1)
