@@ -13,10 +13,6 @@ X = df.drop('Цена', axis=1)  # Признаки
 y = df['Цена']
 scaler.fit(X)
 
-df2 = pd.read_excel("Best_forest.xlsx")
-prices = df2['Цена']
-features = df2.drop(['Цена'],axis=1)
-
 with open("model_rf.pkl", "rb") as file:
     model = pickle.load(file)
 
