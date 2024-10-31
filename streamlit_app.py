@@ -76,4 +76,4 @@ if st.button("Начать прогноз"):
   k = math.floor(int(round(model.predict(df_sc)[0]*0.90,0)) / 100000) * 100000
   t = math.ceil(int(round(model.predict(df_sc)[0]*1.1,0)) / 100000) * 100000
   st.write(f"Цена находится в диапозоне от {k} до {t}")
-st.write("Автор Хаким")
+st.write("                                                                                                                  Автор Хаким")
