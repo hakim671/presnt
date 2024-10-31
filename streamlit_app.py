@@ -13,6 +13,9 @@ X = df.drop('Цена', axis=1)  # Признаки
 y = df['Цена']
 scaler.fit(X)
 
+with open("scaler.pkl", "wb") as file:
+    pickle.dump(scaler, file)
+
 with open("model_rf.pkl", "rb") as file:
     model = pickle.load(file)
 
