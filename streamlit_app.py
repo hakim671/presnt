@@ -8,28 +8,6 @@ import pandas as pd
 import math
 import pickle
 
-st.markdown("""
-    <style>
-        .css-18e3th9 {  /* Основной фон приложения */
-            background-color: #121212;
-            color: white;
-        }
-        .css-1d391kg p { /* Цвет текста */
-            color: white;
-        }
-        .stButton>button {
-            background-color: #4CAF50;
-            color: white;
-            font-size: 16px;
-            padding: 10px 24px;
-            border: none;
-            border-radius: 5px;
-        }
-    </style>
-    """, unsafe_allow_html=True)
-
-
-
 with open("scaler.pkl", "rb") as scaler_file:
     scaler = pickle.load(scaler_file)
 
@@ -92,4 +70,5 @@ if st.button("Начать прогноз"):
   k = math.floor(int(round(model.predict(df_sc)[0]*0.90,0)) / 100000) * 100000
   t = math.ceil(int(round(model.predict(df_sc)[0]*1.1,0)) / 100000) * 100000
   st.write(f"Цена находится в диапозоне от {k} до {t}")
+st.write()
 st.write("Автор Хаким")
