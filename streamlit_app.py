@@ -5,15 +5,20 @@ from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
-import math
-import pickle
 
-with open("scaler.pkl", "rb") as scaler_file:
-    scaler = pickle.load(scaler_file)
+df = pd.read_excel("Homes_enc.xlsx")
+X = df.drop('Цена', axis=1)  # Признаки
+y = df['Цена']
+scaler.fit(X)
 
-with open("model_rf.pkl", "rb") as file:
-    model = pickle.load(file)
+df2 = pd.read_excel("Best_forest.xlsx")
+prices = df2['Цена']
+features = df2.drop(['Цена'],axis=1)
 
+X_train, X_test, y_train, y_test = train_test_split(features,prices,
+                                                    test_size=0.25, random_state=42)
+model = RandomForestRegressor(n_estimators=400, max_depth=14, random_state=42)
+model.fit(X_train,y_train)
 
 komn = st.number_input("Количество комнат",value=1)
 etag = st.number_input("Этаж",value=1)
@@ -67,8 +72,5 @@ elif df_pred['Ремонт'].iloc[0] == "Без ремонта":
 df_pred = df_pred.drop(['Город', 'Тип', 'Состояние', 'Ремонт'], axis=1)
 df_sc = scaler.transform(df_pred)
 if st.button("Начать прогноз"):
-  k = math.floor(int(round(model.predict(df_sc)[0]*0.90,0)) / 100000) * 100000
-  t = math.ceil(int(round(model.predict(df_sc)[0]*1.1,0)) / 100000) * 100000
-  st.write(f"Цена находится в диапозоне от {k} до {t}")
-st.write(" ")
+  st.write(f"Цена находится в диапозоне от {round(model.predict(df_sc)[0]*0.88,0)} до {round(model.predict(df_sc)[0]*1.12,0)}")
 st.write("Автор Хаким")
