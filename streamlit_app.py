@@ -73,5 +73,5 @@ elif df_pred['Ремонт'].iloc[0] == "Без ремонта":
 df_pred = df_pred.drop(['Город', 'Тип', 'Состояние', 'Ремонт'], axis=1)
 df_sc = scaler.transform(df_pred)
 if st.button("Начать прогноз"):
-  st.write(f"Цена находится в диапозоне от {math.ceil(round(model.predict(df_sc)[0]*0.88,0)/10000)*10000} до {round(model.predict(df_sc)[0]*1.12,0)}")
+  st.write(f"Цена находится в диапозоне от {math.ceil(round(model.predict(df_sc)[0]*0.88,0)/10000)*10000} до {math.floor(round(model.predict(df_sc)[0]*1.12,0)/10000)*10000}")
 st.write("Автор Хаким")
