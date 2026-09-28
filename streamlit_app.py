@@ -1,78 +1,181 @@
-фыв
 import streamlit as st
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-scaler = StandardScaler()
-from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
 import math
 
-df = pd.read_excel("Homes_enc.xlsx")
-X = df.drop('Цена', axis=1)  # Признаки
-y = df['Цена']
-scaler.fit(X)
+# ---------- Настройка страницы ----------
+st.set_page_config(
+    page_title="Оценка стоимости недвижимости",
+    page_icon="🏠",
+    layout="centered",
+)
 
-df2 = pd.read_excel("Best_forest.xlsx")
-prices = df2['Цена']
-features = df2.drop(['Цена'],axis=1)
+# ---------- Стили ----------
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap');
 
-X_train, X_test, y_train, y_test = train_test_split(features,prices,
-                                                    test_size=0.25, random_state=42)
-model = RandomForestRegressor(n_estimators=400, max_depth=14, random_state=42)
-model.fit(X_train,y_train)
+html, body, [class*="css"] {
+    font-family: 'Manrope', sans-serif;
+}
 
-komn = st.number_input("Количество комнат",value=1)
-etag = st.number_input("Этаж",value=1)
-plosh = st.number_input("Площадь",value=50,step=10)
-city = st.selectbox("Выберите город", ["Душанбе", "Худжанд", "Бохтар"])
-tip = st.selectbox("Тип застройки", ["Новостройка", "Вторичный рынок"])
-sost = st.selectbox("Состояние", ["Построено", "На стадии"])
-rem = st.selectbox("Ремонт", ["Новый", "Средний","Без ремонта"])
-df_pred = pd.DataFrame({'Комнаты':[komn],
-                        'Этаж':[etag],
-                        'Площадь':[plosh],
-                        'Город':[city],
-                        'Тип':[tip],
-                        'Состояние':[sost],
-                        'Ремонт':[rem]})
-df_pred['Город_Рудаки'] = 0
-df_pred['Город_Худжанд'] = 0
-df_pred['Тип_Новостройка'] = 1
-df_pred['Состояние_Построено'] = 1
-df_pred['Ремонт_Новый_ремонт'] = 1
-df_pred['Ремонт_С_ремонтом'] = 0
+.stApp {
+    background: linear-gradient(180deg, #f4f7fb 0%, #eef2f9 100%);
+}
 
-# Присвоение значений на основе условий
-if df_pred['Город'].iloc[0] == "Душанбе":
-    df_pred['Город_Рудаки'] = 0
-    df_pred['Город_Худжанд'] = 0
-elif df_pred['Город'].iloc[0] == "Рудаки":
-    df_pred['Город_Рудаки'] = 1
-    df_pred['Город_Худжанд'] = 0
-elif df_pred['Город'].iloc[0] == "Худжанд":
-    df_pred['Город_Рудаки'] = 0
-    df_pred['Город_Худжанд'] = 1
+.hero {
+    text-align: center;
+    padding: 1.6rem 1rem 0.4rem 1rem;
+}
+.hero h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1b2540;
+    margin-bottom: 0.2rem;
+}
+.hero p {
+    color: #5a6478;
+    font-size: 0.95rem;
+    margin-top: 0;
+}
 
-if df_pred['Тип'].iloc[0] == "Новостройка":
-    df_pred['Тип_Новостройка'] = 1
+div[data-testid="stForm"] {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 1.8rem 1.8rem 1.2rem 1.8rem;
+    box-shadow: 0 10px 30px rgba(20, 30, 60, 0.08);
+    border: 1px solid #eef0f5;
+}
 
-if df_pred['Состояние'].iloc[0] == "Построено":
-    df_pred['Состояние_Построено'] = 1
+.stButton>button, div[data-testid="stFormSubmitButton"] button {
+    width: 100%;
+    background: linear-gradient(135deg, #4f6df5, #6f4ff5);
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    padding: 0.7rem 0;
+    font-size: 1rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.stButton>button:hover, div[data-testid="stFormSubmitButton"] button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(79, 109, 245, 0.35);
+}
 
-if df_pred['Ремонт'].iloc[0] == "Новый":
-    df_pred['Ремонт_Новый_ремонт'] = 1
-    df_pred['Ремонт_С_ремонтом'] = 0
-elif df_pred['Ремонт'].iloc[0] == "Средний":
-    df_pred['Ремонт_Новый_ремонт'] = 0
-    df_pred['Ремонт_С_ремонтом'] = 1
-elif df_pred['Ремонт'].iloc[0] == "Без ремонта":
-    df_pred['Ремонт_Новый_ремонт'] = 0
-    df_pred['Ремонт_С_ремонтом'] = 0
+.result-card {
+    margin-top: 1.4rem;
+    background: linear-gradient(135deg, #eef2ff, #f5f0ff);
+    border: 1px solid #dfe4fb;
+    border-radius: 16px;
+    padding: 1.4rem;
+    text-align: center;
+}
+.result-card .label {
+    color: #5a6478;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+.result-card .price {
+    color: #1b2540;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
 
-# Удаление ненужных колонок
-df_pred = df_pred.drop(['Город', 'Тип', 'Состояние', 'Ремонт'], axis=1)
-df_sc = scaler.transform(df_pred)
-if st.button("Начать прогноз"):
-  st.write(f"Цена находится в диапозоне от {math.ceil(round(model.predict(df_sc)[0]*0.88,0)/10000)*10000} до {math.floor(round(model.predict(df_sc)[0]*1.12,0)/10000)*10000}")
-st.write("Автор Хаким")
+.footer {
+    text-align: center;
+    color: #9aa2b1;
+    font-size: 0.85rem;
+    margin-top: 2rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ---------- Заголовок ----------
+st.markdown("""
+<div class="hero">
+    <h1>🏠 Оценка стоимости недвижимости</h1>
+    <p>Заполните параметры квартиры — модель подскажет ориентировочный диапазон цены</p>
+</div>
+""", unsafe_allow_html=True)
+
+
+# ---------- Загрузка данных и обучение модели (один раз, с кэшем) ----------
+@st.cache_resource(show_spinner="Обучаем модель, это займёт немного времени...")
+def load_and_train():
+    df = pd.read_excel("Homes_enc.xlsx")
+    X = df.drop('Цена', axis=1)
+
+    scaler = StandardScaler()
+    scaler.fit(X)
+
+    df2 = pd.read_excel("Best_forest.xlsx")
+    prices = df2['Цена']
+    features = df2.drop(['Цена'], axis=1)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        features, prices, test_size=0.25, random_state=42
+    )
+
+    model = RandomForestRegressor(n_estimators=400, max_depth=14, random_state=42)
+    model.fit(X_train, y_train)
+
+    return model, scaler
+
+
+model, scaler = load_and_train()
+
+# ---------- Форма ввода ----------
+with st.form("prediction_form"):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        komn = st.number_input("Комнаты", min_value=1, value=1, step=1)
+    with col2:
+        etag = st.number_input("Этаж", min_value=1, value=1, step=1)
+    with col3:
+        plosh = st.number_input("Площадь, м²", min_value=10, value=50, step=10)
+
+    col4, col5 = st.columns(2)
+    with col4:
+        city = st.selectbox("Город", ["Душанбе", "Худжанд", "Бохтар"])
+        tip = st.selectbox("Тип застройки", ["Новостройка", "Вторичный рынок"])
+    with col5:
+        sost = st.selectbox("Состояние", ["Построено", "На стадии"])
+        rem = st.selectbox("Ремонт", ["Новый", "Средний", "Без ремонта"])
+
+    submitted = st.form_submit_button("Начать прогноз")
+
+# ---------- Кодирование признаков и предсказание ----------
+if submitted:
+    df_pred = pd.DataFrame({
+        'Комнаты': [komn],
+        'Этаж': [etag],
+        'Площадь': [plosh],
+    })
+
+    df_pred['Город_Рудаки'] = 1 if city == "Рудаки" else 0
+    df_pred['Город_Худжанд'] = 1 if city == "Худжанд" else 0
+    df_pred['Тип_Новостройка'] = 1 if tip == "Новостройка" else 0
+    df_pred['Состояние_Построено'] = 1 if sost == "Построено" else 0
+    df_pred['Ремонт_Новый_ремонт'] = 1 if rem == "Новый" else 0
+    df_pred['Ремонт_С_ремонтом'] = 1 if rem == "Средний" else 0
+
+    df_sc = scaler.transform(df_pred)
+    pred = model.predict(df_sc)[0]
+
+    low = math.ceil(round(pred * 0.88, 0) / 10000) * 10000
+    high = math.floor(round(pred * 1.12, 0) / 10000) * 10000
+
+    def fmt(n):
+        return f"{n:,.0f}".replace(",", " ")
+
+    st.markdown(f"""
+    <div class="result-card">
+        <div class="label">Ориентировочная стоимость</div>
+        <div class="price">{fmt(low)} — {fmt(high)}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown('<div class="footer">Автор: Хаким</div>', unsafe_allow_html=True)
