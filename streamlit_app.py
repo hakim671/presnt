@@ -1,3 +1,4 @@
+фыв
 import streamlit as st
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
