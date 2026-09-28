@@ -173,7 +173,7 @@ if submitted:
 
     st.markdown(f"""
     <div class="result-card">
-        <div class="label">Ориентировочная стоимость</div>
+        <div class="label">Ориентировочная стоимость на 2024 год</div>
         <div class="price">{fmt(low)} — {fmt(high)}</div>
     </div>
     """, unsafe_allow_html=True)
