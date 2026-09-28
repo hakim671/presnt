@@ -165,8 +165,8 @@ if submitted:
     df_sc = scaler.transform(df_pred)
     pred = model.predict(df_sc)[0]
 
-    low = math.ceil(round(pred * 0.88, 0) / 10000) * 10000
-    high = math.floor(round(pred * 1.12, 0) / 10000) * 10000
+    low = math.ceil(round(pred * 0.92, 0) / 10000) * 10000
+    high = math.floor(round(pred * 1.08, 0) / 10000) * 10000
 
     def fmt(n):
         return f"{n:,.0f}".replace(",", " ")
@@ -178,4 +178,3 @@ if submitted:
     </div>
     """, unsafe_allow_html=True)
 
-st.markdown('<div class="footer">Автор: Хаким</div>', unsafe_allow_html=True)
